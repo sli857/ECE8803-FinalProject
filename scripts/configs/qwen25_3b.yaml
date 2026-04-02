@@ -1,4 +1,4 @@
 model_id: "models/hf/Qwen2.5-3B-Instruct"
-num_prompts: 10
+num_prompts: 100
 results_subdir: "qwen"
 experiment_prefix: "qwen25_bnb"
