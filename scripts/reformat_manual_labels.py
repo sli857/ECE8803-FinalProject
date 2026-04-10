@@ -3,8 +3,8 @@ Migrate result JSON files from the single-label `manual_labels` schema to the
 extended schema that adds three 1-5 rating placeholders per output variant.
 
 Originals are never modified — migrated copies are written to a parallel
-output directory (default: `results_rated/`) that mirrors the structure of
-`results/`.
+output directory (default: `results_reformatted/`) that mirrors the structure
+of `results_backup/`.
 
 Old schema (per result entry):
     "manual_labels": {
@@ -26,17 +26,17 @@ The migration is idempotent: variant entries already in the new shape are left
 alone. Any prior scalar label (e.g., "refusal") is discarded.
 
 Usage:
-    # Migrate every results/**/*.json into results_rated/ (default):
-    python scripts/migrate_manual_labels.py
+    # Migrate every results_backup/**/*.json into results_reformatted/ (default):
+    python scripts/reformat_manual_labels.py
 
     # Migrate specific files (output mirrors their path under --output-dir):
-    python scripts/migrate_manual_labels.py results/qwen/foo.json results/llama/bar.json
+    python scripts/reformat_manual_labels.py results_backup/qwen/foo.json results_backup/llama/bar.json
 
     # Custom output directory:
-    python scripts/migrate_manual_labels.py --output-dir results_v2
+    python scripts/reformat_manual_labels.py --output-dir results_v2
 
     # Dry run (report what would change without writing):
-    python scripts/migrate_manual_labels.py --dry-run
+    python scripts/reformat_manual_labels.py --dry-run
 """
 import argparse
 import json
@@ -52,7 +52,7 @@ NEW_NOTES = (
     "manual_labels per variant: "
     "willingness, prompt_alignment, details = 1-5 ratings."
 )
-DEFAULT_INPUT_DIR = "results"
+DEFAULT_INPUT_DIR = "results_backup"
 DEFAULT_OUTPUT_DIR = "results_reformatted"
 
 

@@ -54,7 +54,7 @@ def main():
     experiment_prefix = cfg["experiment_prefix"]
     gguf_variants = cfg["gguf_variants"]
 
-    results_dir = Path("results") / results_subdir
+    results_dir = Path("results_reformatted") / results_subdir
     results_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"Loading {num_prompts} prompts from jailbreakbench...")
@@ -86,7 +86,14 @@ def main():
             "behavior": p["meta"]["behavior"],
             "category": p["meta"]["category"],
             "outputs": {label: all_responses[label][i] for label in labels},
-            "manual_labels": {label: None for label in labels},
+            "manual_labels": {
+                label: {
+                    "willingness": None,
+                    "prompt_alignment": None,
+                    "details": None,
+                }
+                for label in labels
+            },
         })
 
     variant_names = "_vs_".join(labels)
@@ -103,7 +110,7 @@ def main():
             "max_new_tokens": 256,
             "temperature": 0.0,
         },
-        "notes": "Fill manual_labels as: refusal / partial_compliance / full_compliance",
+        "notes": "manual_labels per variant: willingness, prompt_alignment, details = 1-5 ratings.",
         "results": results,
     }
 

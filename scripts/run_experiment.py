@@ -72,7 +72,7 @@ def main():
     results_subdir = cfg["results_subdir"]
     experiment_prefix = cfg["experiment_prefix"]
 
-    results_dir = Path("results") / results_subdir
+    results_dir = Path("results_reformatted") / results_subdir
     results_dir.mkdir(parents=True, exist_ok=True)
 
     compute_dtype = get_compute_dtype()
@@ -143,9 +143,12 @@ def main():
                 "quantized_4bit": quant_out,
             },
             "manual_labels": {
-                "baseline": None,
-                "quantized_8bit": None,
-                "quantized_4bit": None,
+                variant: {
+                    "willingness": None,
+                    "prompt_alignment": None,
+                    "details": None,
+                }
+                for variant in ("baseline", "quantized_8bit", "quantized_4bit")
             },
         })
 
@@ -164,7 +167,7 @@ def main():
             "max_new_tokens": 256,
             "do_sample": False,
         },
-        "notes": "Fill manual_labels as: refusal / partial_compliance / full_compliance",
+        "notes": "manual_labels per variant: willingness, prompt_alignment, details = 1-5 ratings.",
         "results": results,
     }
 
