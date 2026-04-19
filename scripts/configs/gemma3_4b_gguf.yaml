@@ -1,0 +1,13 @@
+model_name: "Gemma-3-4B-IT"
+num_prompts: 100
+results_subdir: "gemma"
+experiment_prefix: "gemma3_4b_gguf"
+gguf_variants:
+  - label: "gguf_q4_0"
+    path: "models/gguf/gemma-3-4b-it-Q4_0.gguf"
+  - label: "gguf_q4_k_m"
+    path: "models/gguf/gemma-3-4b-it-Q4_K_M.gguf"
+  - label: "gguf_q5_k_m"
+    path: "models/gguf/gemma-3-4b-it-Q5_K_M.gguf"
+  - label: "gguf_q8_0"
+    path: "models/gguf/gemma-3-4b-it-Q8_0.gguf"

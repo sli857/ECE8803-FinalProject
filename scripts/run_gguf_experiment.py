@@ -32,7 +32,8 @@ def run_gguf_config(llm, prompts, config_label):
         goal = p["meta"]["goal"]
         print(f"  [{i + 1}/{n}] {goal[:80]}")
         try:
-            messages = build_messages(p["prompt_text"])
+            prompt_text = p.get("prompt_text") or goal
+            messages = build_messages(prompt_text)
             response = generate_response_gguf(llm, messages)
         except Exception as e:
             print(f"    ERROR ({config_label}): {e}")
