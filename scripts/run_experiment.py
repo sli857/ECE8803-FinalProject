@@ -2,18 +2,15 @@
 BitsAndBytes experiment runner. Usage:
     python scripts/run_experiment.py scripts/configs/llama32_3b.yaml
 """
+from common import load_config, load_all_prompts, build_messages
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+import torch
+from pathlib import Path
+from datetime import datetime
+import json
+import argparse
 from common import ensure_utf8
 ensure_utf8()
-
-import argparse
-import json
-from datetime import datetime
-from pathlib import Path
-
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
-
-from common import load_config, load_all_prompts, build_messages
 
 
 def get_compute_dtype():
@@ -51,7 +48,8 @@ def run_config(model, tokenizer, prompts, config_label):
         goal = p["meta"]["goal"]
         print(f"  [{i + 1}/{n}] {goal[:80]}")
         try:
-            messages = build_messages(p["prompt_text"])
+            prompt_text = p.get("prompt_text") or goal
+            messages = build_messages(prompt_text)
             response = generate_response(model, tokenizer, messages)
         except Exception as e:
             print(f"    ERROR ({config_label}): {e}")
@@ -104,7 +102,8 @@ def main():
         device_map="auto",
         quantization_config=quant_config_8bit,
     )
-    quant_8bit_responses = run_config(model, tokenizer, prompts, "quantized_8bit")
+    quant_8bit_responses = run_config(
+        model, tokenizer, prompts, "quantized_8bit")
     del model
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
@@ -172,7 +171,8 @@ def main():
     }
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    out_path = results_dir / f"{experiment_prefix}_pair{num_prompts}_{timestamp}.json"
+    out_path = results_dir / \
+        f"{experiment_prefix}_pair{num_prompts}_{timestamp}.json"
     with out_path.open("w", encoding="utf-8") as f:
         json.dump(output, f, indent=2, ensure_ascii=False)
 

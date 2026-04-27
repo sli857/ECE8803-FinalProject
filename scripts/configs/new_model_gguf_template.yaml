@@ -1,0 +1,7 @@
+model_name: "My-New-Model"
+num_prompts: 10
+results_subdir: "qwen"
+experiment_prefix: "mynewmodel_gguf"
+gguf_variants:
+  - label: "gguf_test"
+    path: "models/gguf/my-new-model.gguf"
