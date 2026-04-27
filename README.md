@@ -13,7 +13,7 @@ This document describes the end-to-end research procedure for studying how quant
 
 ---
 
-## Current Status (as of 2026-04-09)
+## Current Status (as of 2026-04-27)
 
 | Phase | Status |
 |---|---|
@@ -39,6 +39,10 @@ This document describes the end-to-end research procedure for studying how quant
 | Qwen2.5-3B | GGUF Q4_0 | 100 | Done (Apr 7) |
 | Qwen2.5-3B | GGUF Q4_K_M | 100 | Done (Apr 7) |
 | Qwen2.5-3B | GGUF Q8_0 | 100 | Done (Apr 7) |
+| Gemma-3-4B | GGUF Q4_0 | 100 | Done (Apr 18) |
+| Gemma-3-4B | GGUF Q4_K_M | 100 | Done (Apr 18) |
+| Gemma-3-4B | GGUF Q5_K_M | 100 | Done (Apr 18) |
+| Gemma-3-4B | GGUF Q8_0 | 100 | Done (Apr 18) |
 
 ---
 
@@ -46,10 +50,11 @@ This document describes the end-to-end research procedure for studying how quant
 
 ### 1.1 Models
 
-| Model | Size | Source |
-|---|---|---|
-| Qwen2.5-3B-Instruct | 3B | Qwen (open weight) |
-| Llama-3.2-3B-Instruct | 3B | Meta (gated) |
+| Model | Size | Source | Coverage |
+|---|---|---|---|
+| Qwen2.5-3B-Instruct | 3B | Qwen (open weight) | BnB + GGUF |
+| Llama-3.2-3B-Instruct | 3B | Meta (gated) | BnB + GGUF |
+| Gemma-3-4B-IT | 4B | Google (license accept) | GGUF only |
 
 ### 1.2 Quantization conditions
 
@@ -60,7 +65,7 @@ Each model is run under multiple conditions to compare safety behavior:
 | **Baseline** | Full-precision bfloat16 (or float16 fallback) | transformers |
 | **INT4 (NF4)** | 4-bit Normal Float via BitsAndBytes | bitsandbytes |
 | **INT8** | 8-bit quantization via BitsAndBytes | bitsandbytes |
-| **GGUF** | llama.cpp quantization (Q4_0, Q4_K_M, Q8_0) | llama-cpp-python |
+| **GGUF** | llama.cpp quantization (Q4_0, Q4_K_M, Q8_0; Gemma also runs Q5_K_M) | llama-cpp-python |
 
 ### 1.3 Jailbreak prompts
 
